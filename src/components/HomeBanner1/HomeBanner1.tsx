@@ -109,7 +109,11 @@ const HomeBanner1 = () => {
                     simplifyFraction(item.value, item.goal)[1]}
                 </span>
               </CircularProgress>
-              <button>
+              <button
+                onClick={() => {
+                  window.location.href = `/report/${item.name}`;
+                }}
+              >
                 Show Report
                 <AiOutlineEye />
               </button>

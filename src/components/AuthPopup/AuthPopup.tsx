@@ -5,15 +5,28 @@ import Image from "next/image";
 import Input from "@mui/joy/Input";
 import Select from "@mui/joy/Select";
 import Option from "@mui/joy/Option";
+import { AiFillDelete, AiOutlineClose } from "react-icons/ai";
 
-const AuthPopup = () => {
+interface AuthPopupProps {
+  setShowpopup: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const AuthPopup: React.FC<AuthPopupProps> = ({ setShowpopup }) => {
+
   const [showSignup, setShowSignup] = React.useState<boolean>(false);
 
-  const handleLogin = () => {};
-  const handleSignup = () => {};
+  const handleLogin = () => { };
+  const handleSignup = () => { };
 
   return (
     <div className="popup">
+      <button className='close'
+                onClick={() => {
+                    setShowpopup(false)
+                }}
+            >
+                <AiOutlineClose />
+      </button>
       {showSignup ? (
         <div className="authform">
           <div className="left">
@@ -63,7 +76,7 @@ const AuthPopup = () => {
                 <Option value="female">Female</Option>
                 <Option value="other">Other</Option>
               </Select>
-<br />
+              <br />
               <label htmlFor="Height">Height</label>
               <div className="form_input_leftright">
                 <Input
