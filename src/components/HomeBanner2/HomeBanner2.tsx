@@ -105,13 +105,16 @@ const HomeBanner2 = () => {
         className="mySwiper"
       >
         {workouts &&
-          workouts.map((item: any, index: number) => {
+          workouts.map((item,index) => {
             return (
               <SwiperSlide key={index}>
                 <div
                   className="swiper-slide"
                   style={{
                     backgroundImage: `url(${item.imageUrl})`,
+                  }}
+                  onClick={()=>{
+                    window.location.href = `/workout/${item.type}`
                   }}
                 >
                   <div className="swiper-slide-content">
