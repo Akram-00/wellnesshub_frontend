@@ -8,9 +8,32 @@ import Link from "next/link";
 import AuthPopup from "../AuthPopup/AuthPopup";
 
 const Navbar = () => {
-  const [isLoggedIn, setIsLoggedIn] = React.useState<boolean>(false);
+  const [isLoggedin, setIsloggedin] = React.useState<boolean>(false);
 
   const [showpopup, setShowpopup] = React.useState<boolean>(false);
+
+  const checkLogin = async () => {
+    fetch(process.env.NEXT_PUBLIC_BACKEND_API + "/auth/checklogin", {
+      method: "POST",
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data.ok) {
+          setIsloggedin(true);
+        } else {
+          setIsloggedin(false);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  React.useEffect(() => {
+    checkLogin();
+  }, [showpopup]);
 
   return (
     <nav>
@@ -20,7 +43,7 @@ const Navbar = () => {
       <Link href="/profile">
         <IoIosBody />
       </Link>
-      {isLoggedIn ? (
+      {isLoggedin ? (
         <button>Logout</button>
       ) : (
         <button
