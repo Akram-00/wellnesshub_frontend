@@ -4,9 +4,12 @@ import { LineChart } from "@mui/x-charts/LineChart";
 import "./ReportPage.css";
 import { AiFillEdit } from "react-icons/ai";
 import CalorieIntakePopup from "@/components/ReportFormPopup/CalorieIntake/CalorieIntakePopup";
+import { usePathname } from "next/navigation";
 
 const page = () => {
   const color = "#ffc20e";
+  const pathName = usePathname()
+  console.log(pathName)
 
   const chartsParams = {
     // margin: { bottom: 20, left: 25, right: 5 },
@@ -14,7 +17,7 @@ const page = () => {
   };
 
   const [dataS1, setDataS1] = React.useState<any>(null);
-  
+
   const getDataForS1 = async () => {
     let temp = [
       {
@@ -96,7 +99,8 @@ const page = () => {
     getDataForS1();
   }, []);
 
-  const [showCalorieIntakePopup, setShowCalorieIntakePopup] = React.useState<boolean>(false);
+  const [showCalorieIntakePopup, setShowCalorieIntakePopup] =
+    React.useState<boolean>(false);
 
   return (
     <div className="reportpage">
@@ -125,88 +129,23 @@ const page = () => {
           />
         )}
       </div>
-      <div className="s2">
-        {dataS1 && (
-          <LineChart
-            xAxis={[
-              {
-                id: "Day",
-                data: dataS1.xAxis.data,
-                scaleType: dataS1.xAxis.scaleType,
-                label: dataS1.xAxis.label,
-                valueFormatter: (date: any) => {
-                  return date.getDate().toString();
-                },
-              },
-            ]}
-            series={[
-              {
-                data: dataS1.data,
-                label: dataS1.title,
-                color: dataS1.color,
-              },
-            ]}
-            {...chartsParams}
-          />
-        )}
-      </div>
-      <div className="s3">
-        {dataS1 && (
-          <LineChart
-            xAxis={[
-              {
-                id: "Day",
-                data: dataS1.xAxis.data,
-                scaleType: dataS1.xAxis.scaleType,
-                label: dataS1.xAxis.label,
-                valueFormatter: (date: any) => {
-                  return date.getDate().toString();
-                },
-              },
-            ]}
-            series={[
-              {
-                data: dataS1.data,
-                label: dataS1.title,
-                color: dataS1.color,
-              },
-            ]}
-            {...chartsParams}
-          />
-        )}
-      </div>
-      <div className="s4">
-        {dataS1 && (
-          <LineChart
-            xAxis={[
-              {
-                id: "Day",
-                data: dataS1.xAxis.data,
-                scaleType: dataS1.xAxis.scaleType,
-                label: dataS1.xAxis.label,
-                valueFormatter: (date: any) => {
-                  return date.getDate().toString();
-                },
-              },
-            ]}
-            series={[
-              {
-                data: dataS1.data,
-                label: dataS1.title,
-                color: dataS1.color,
-              },
-            ]}
-            {...chartsParams}
-          />
-        )}
-      </div>
-      <button className="editbutton" onClick={()=>{setShowCalorieIntakePopup(true)}}>
-        <AiFillEdit/>
+      <button
+        className="editbutton"
+        onClick={() => {
+          if (pathName == "/report/Calorie%20Intake"){
+            setShowCalorieIntakePopup(true);
+          }else{
+            alert("show other popups")
+          }
+        }}
+      >
+        <AiFillEdit />
       </button>
-      {
-        showCalorieIntakePopup && 
-        <CalorieIntakePopup setShowCalorieIntakePopup={setShowCalorieIntakePopup}/>
-      }
+      {showCalorieIntakePopup && (
+        <CalorieIntakePopup
+          setShowCalorieIntakePopup={setShowCalorieIntakePopup}
+        />
+      )}
     </div>
   );
 };

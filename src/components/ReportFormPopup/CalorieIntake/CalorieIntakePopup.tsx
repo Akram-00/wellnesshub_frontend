@@ -2,12 +2,14 @@ import React from "react";
 import "../popup.css";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import DatePicker from "react-horizontal-datepicker";
 import { AiFillDelete, AiOutlineClose } from "react-icons/ai";
-import { TimeClock } from "@mui/x-date-pickers/TimeClock";
+import {TimePicker} from "@muli/x-date-pickers/TimePicker"
 import dayjs, { Dayjs } from "dayjs";
+import { DatePicker } from "@mui/x-date-pickers";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { toast } from "react-toastify";
+
 interface CaloriIntakePopupProps {
   setShowCalorieIntakePopup: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -17,85 +19,86 @@ const CalorieIntakePopup: React.FC<CaloriIntakePopupProps> = ({
 }) => {
   const color = "#ffc20e";
 
-  const [date, setDate] = React.useState<any>(new Date());
+  const [date, setDate] = React.useState<any>(dayjs(new Date()));
+  const [time, setTime] = React.useState<any>(dayjs(new Date()));
 
   const selectedDay = (val: any) => {
-    console.log(val);
+    setDate(val)
   };
 
-  const [value, setValue] = React.useState<Dayjs | null>(
-    dayjs("2022-04-17T15:30")
-  );
+  const [calorieIntake, setCalorieIntake ] = React.useState<any>({
+    item:'',
+    date:'',
+    quantity:'',
+    quantityType:''
+  })
+
+  const [item, setItem] = React.useState<any>([])
+
+  const saveCalorieIntake = async () =>{
+    
+  }
+  const getCalorieIntake = async () =>{
+
+  }
+  const deleteCalorieIntake = async (item:any) =>{
+
+  }
+
+  React.useEffect(()=>{
+    getCalorieIntake()
+  },[date])
+
   return (
     <div className="popupout">
       <div className="popupbox">
-        <button
-          className="close"
-          onClick={() => {
-            setShowCalorieIntakePopup(false);
-          }}
-        >
-          <AiOutlineClose />
+        <button className="close" onClick={()=>{setShowCalorieIntakePopup(false)}}>
+          <AiOutlineClose/>
         </button>
-
-        <DatePicker
-          getSelectedDay={selectedDay}
-          endDate={100}
-          selectDate={new Date()}
-          labelFormat={"MMMM"}
-          color={color}
-        />
-
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            label="select the day"
+            onChange={(newValue:any)=>{
+              selectedDay(newValue)
+            }}
+          />
+        </LocalizationProvider>
         <TextField
           id="outlined-basic"
-          label="Food item name"
+          label="Food Item Name"
           variant="outlined"
           color="warning"
+          onChange={((e)=>{
+            setCalorieIntake({
+              ...calorieIntake,
+              item:e.target.value
+            })
+          })}
         />
         <TextField
           id="outlined-basic"
-          label="Food item amount (in gms)"
+          label="Food Item Amount (in gms)"
+          type="number"
           variant="outlined"
           color="warning"
+          onChange={((e)=>{
+            setCalorieIntake({
+              ...calorieIntake,
+              quantity:e.target.value
+            })
+          })}
         />
-        <div className="timebox">
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <TimeClock
-              value={value}
-              onChange={(newValue: any) => setValue(newValue)}
-            />
-          </LocalizationProvider>
-        </div>
-        <Button variant="contained" color="warning">
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <TimePicker
+            lable="Pick the time"
+            value={time}
+            onChange={(newValue) => setTime(newValue)}
+          />
+        </LocalizationProvider>
+        <Button variant="contained" colors="warning"
+        onclick={saveCalorieIntake}>
           Save
         </Button>
-        <div className="hrline"></div>
-        <div className="items">
-          <div className="item">
-            <h3>Apple</h3>
-            <h3>100 gms</h3>
-            <button>
-              {" "}
-              <AiFillDelete />
-            </button>
-          </div>
-          <div className="item">
-            <h3>Banana</h3>
-            <h3>200 gms</h3>
-            <button>
-              {" "}
-              <AiFillDelete />
-            </button>
-          </div>
-          <div className="item">
-            <h3>Rice</h3>
-            <h3>300 gms</h3>
-            <button>
-              {" "}
-              <AiFillDelete />
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   );
