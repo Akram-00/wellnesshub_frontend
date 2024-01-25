@@ -4,6 +4,7 @@ import { LineChart } from "@mui/x-charts/LineChart";
 import "./ReportPage.css";
 import { AiFillEdit } from "react-icons/ai";
 import CalorieIntakePopup from "@/components/ReportFormPopup/CalorieIntake/CalorieIntakePopup";
+import SleepPopup from "@/components/ReportFormPopup/Sleep/SleepPopup";
 import { usePathname } from "next/navigation";
 
 const page = () => {
@@ -19,49 +20,6 @@ const page = () => {
   const [dataS1, setDataS1] = React.useState<any>(null);
 
   const getDataForS1 = async () => {
-    // let temp = [
-    //   {
-    //     date: "Thu Sep 28 2023 20:30:30 GMT+0530 (India Standard Time)",
-    //     value: 2000,
-    //     unit: "kcal",
-    //   },
-    //   {
-    //     date: "Wed Sep 27 2023 20:30:30 GMT+0530 (India Standard Time)",
-    //     value: 2500,
-    //     unit: "kcal",
-    //   },
-    //   {
-    //     date: "Tue Sep 26 2023 20:30:30 GMT+0530 (India Standard Time)",
-    //     value: 2700,
-    //     unit: "kcal",
-    //   },
-    //   {
-    //     date: "Mon Sep 25 2023 20:30:30 GMT+0530 (India Standard Time)",
-    //     value: 3000,
-    //     unit: "kcal",
-    //   },
-    //   {
-    //     date: "Sun Sep 24 2023 20:30:30 GMT+0530 (India Standard Time)",
-    //     value: 2000,
-    //     unit: "kcal",
-    //   },
-    //   {
-    //     date: "Sat Sep 23 2023 20:30:30 GMT+0530 (India Standard Time)",
-    //     value: 2300,
-    //     unit: "kcal",
-    //   },
-    //   {
-    //     date: "Fri Sep 22 2023 20:30:30 GMT+0530 (India Standard Time)",
-    //     value: 2500,
-    //     unit: "kcal",
-    //   },
-    //   {
-    //     date: "Thu Sep 21 2023 20:30:30 GMT+0530 (India Standard Time)",
-    //     value: 2700,
-    //     unit: "kcal",
-    //   },
-    // ];
-
     if (pathName == "/report/Calorie%20Intake") {
       try {
         const response = await fetch(
@@ -114,7 +72,9 @@ const page = () => {
 
           // Now result contains objects with incremented calorieIntake values for the same day
           let dataForXAxis = result.map((item: any) => item.date);
-          let dataForLineChart = result.map((item: any) => JSON.stringify(item.value));
+          let dataForLineChart = result.map((item: any) =>
+            JSON.stringify(item.value)
+          );
 
           console.log(temp);
 
@@ -145,8 +105,8 @@ const page = () => {
       } catch (error) {
         console.log(error);
       }
-    } else {
-      alert("Get Data for other reports");
+    } else if (pathName == "/report/Sleep") {
+      alert("Get Data for sleep");
     }
   };
 
@@ -156,6 +116,7 @@ const page = () => {
 
   const [showCalorieIntakePopup, setShowCalorieIntakePopup] =
     React.useState<boolean>(false);
+  const [showSleepPopup, setShowSleepPopup] = React.useState<boolean>(false);
 
   return (
     <div className="reportpage">
@@ -189,8 +150,10 @@ const page = () => {
         onClick={() => {
           if (pathName == "/report/Calorie%20Intake") {
             setShowCalorieIntakePopup(true);
+          } else if (pathName == "/report/Sleep") {
+            setShowSleepPopup(true);
           } else {
-            alert("show other popups");
+            alert("Show other popups");
           }
         }}
       >
@@ -201,6 +164,7 @@ const page = () => {
           setShowCalorieIntakePopup={setShowCalorieIntakePopup}
         />
       )}
+      {showSleepPopup && <SleepPopup setShowSleepPopup={setShowSleepPopup} />}
     </div>
   );
 };
