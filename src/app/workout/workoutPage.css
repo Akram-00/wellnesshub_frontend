@@ -26,9 +26,8 @@
 }
 
 .workout__exercise__image img {
-    max-width: 100%;
     height: auto;
-    min-width: 300px;
+    width: 300px;
 }
 
 .workout__exercise__content {

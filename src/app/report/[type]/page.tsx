@@ -82,6 +82,9 @@ const page = () => {
         const data = await response.json();
         if (response.ok) {
           let temp = data.data.map((item: any) => {
+
+
+            
             return {
               date: item.date,
               value: item.calorieIntake,
@@ -97,6 +100,7 @@ const page = () => {
 
             let dataForXAxis = temp.map((item: any) => {
               let val = new Date(item.date);
+
               return val;
             });
 
