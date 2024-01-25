@@ -81,50 +81,64 @@ const page = () => {
 
         const data = await response.json();
         if (response.ok) {
+          // Assuming data.data is your original array of objects
+          // Assuming data.data is your original array of objects
           let temp = data.data.map((item: any) => {
-
-
-            
             return {
-              date: item.date,
+              date: new Date(item.date),
               value: item.calorieIntake,
               unit: "kcal",
             };
           });
 
+          // Aggregate data by day using filter
+          let result = temp.reduce((accumulator: any[], currentItem: any) => {
+            const existingItem = accumulator.find(
+              (item) => item.date.getDate() === currentItem.date.getDate()
+            );
 
-            let dataForLineChart = temp.map((item: any) => {
-              let val = JSON.stringify(item.value);
-              return val;
-            });
+            if (existingItem) {
+              // If the day already exists in accumulator, increment the calorieIntake value
+              existingItem.value += currentItem.value;
+            } else {
+              // If the day doesn't exist, add the item to accumulator
+              accumulator.push({
+                date: currentItem.date,
+                value: currentItem.value,
+                unit: "kcal",
+              });
+            }
 
-            let dataForXAxis = temp.map((item: any) => {
-              let val = new Date(item.date);
+            return accumulator;
+          }, []);
 
-              return val;
-            });
+          // Now result contains objects with incremented calorieIntake values for the same day
+          let dataForXAxis = result.map((item: any) => item.date);
+          let dataForLineChart = result.map((item: any) => JSON.stringify(item.value));
 
-            console.log({
-              data: dataForLineChart,
-              title: "1 Day Calorie Intake",
-              color: color,
-              xAxis: {
-                data: dataForXAxis,
-                label: "Last 10 Days",
-                scaleType: "time",
-              },
-            });
+          console.log(temp);
 
-            setDataS1({
-              data: dataForLineChart,
-              title: "1 Day Calorie Intake",
-              color: color,
-              xAxis: {
-                data: dataForXAxis,
-                label: "Last 10 Days",
-                scaleType: "time",
-              },
-            });
+          console.log({
+            data: dataForLineChart,
+            title: "1 Day Calorie Intake",
+            color: color,
+            xAxis: {
+              data: dataForXAxis,
+              label: "Last 10 Days",
+              scaleType: "time",
+            },
+          });
+
+          setDataS1({
+            data: dataForLineChart,
+            title: "1 Day Calorie Intake",
+            color: color,
+            xAxis: {
+              data: dataForXAxis,
+              label: "Last 10 Days",
+              scaleType: "time",
+            },
+          });
         } else {
           setDataS1([]);
         }
@@ -157,14 +171,14 @@ const page = () => {
                 valueFormatter: (date: any) => {
                   return date.getDate().toString();
                 },
-              }
+              },
             ]}
             series={[
               {
                 data: dataS1.data,
                 label: dataS1.title,
                 color: dataS1.color,
-              }
+              },
             ]}
             {...chartsParams}
           />
