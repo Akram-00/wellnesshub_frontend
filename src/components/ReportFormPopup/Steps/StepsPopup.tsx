@@ -9,11 +9,11 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { toast } from "react-toastify";
 
-interface SleepPopupProps {
-  setShowSleepPopup: React.Dispatch<React.SetStateAction<boolean>>;
+interface StepsPopupProps {
+  setShowStepsPopup: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const SleepPopup: React.FC<SleepPopupProps> = ({ setShowSleepPopup }) => {
+const StepsPopup: React.FC<StepsPopupProps> = ({ setShowStepsPopup }) => {
   const color = "#ffc20e";
 
   const [date, setDate] = React.useState<any>(dayjs(new Date()));
@@ -21,21 +21,21 @@ const SleepPopup: React.FC<SleepPopupProps> = ({ setShowSleepPopup }) => {
   const selectedDay = (val: any) => {
     setDate(val);
   };
-
-  const [sleep, setSleep] = React.useState<any>({
+ b
+  const [steps, setSteps] = React.useState<any>({
     date: "",
-    durationInHrs: "",
+    steps: "",
   });
 
   const [items, setItems] = React.useState<any>([]);
 
-  const saveSleepTrack = async () => {
+  const saveStepsTrack = async () => {
     let tempdate = date.format("YYYY-MM-DD");
     let finaldatetime = new Date(tempdate);
 
     try {
       const response = await fetch(
-        process.env.NEXT_PUBLIC_BACKEND_API + "/sleeptrack/addsleepentry",
+        process.env.NEXT_PUBLIC_BACKEND_API + "/steptrack/addstepentry",
         {
           method: "POST",
           headers: {
@@ -44,30 +44,30 @@ const SleepPopup: React.FC<SleepPopupProps> = ({ setShowSleepPopup }) => {
           credentials: "include",
           body: JSON.stringify({
             date: finaldatetime,
-            durationInHrs: sleep.durationInHrs,
+            steps: steps.steps,
           }),
         }
       );
 
       const data = await response.json();
       if (response.ok) {
-        toast.success("Sleep Track added successfully");
-        getSleepTrack();
+        toast.success("Steps Track added successfully");
+        getStepsTrack();
       } else {
-        toast.error("Error in adding Sleep Track");
+        toast.error("Error in adding Steps Track");
         console.log(data);
       }
     } catch (error) {
-      toast.error("Error in adding Sleep Track in database");
+      toast.error("Error in adding Steps Track in database");
       console.log(error);
     }
   };
 
-  const getSleepTrack = async () => {
+  const getStepsTrack = async () => {
     setItems([]);
     try {
       const response = await fetch(
-        process.env.NEXT_PUBLIC_BACKEND_API + "/sleeptrack/getsleepbydate",
+        process.env.NEXT_PUBLIC_BACKEND_API + "/steptrack/getstepsbydate",
         {
           method: "POST",
           headers: {
@@ -82,22 +82,22 @@ const SleepPopup: React.FC<SleepPopupProps> = ({ setShowSleepPopup }) => {
 
       const data = await response.json();
       if (data.ok) {
-        console.log(data.data, "Sleep track data data for data");
+        console.log(data.data, "Steps track data data for data");
         setItems(data.data);
       } else {
-        toast.error("Error in Sleep track");
+        toast.error("Error in Steps track");
         console.log(data);
       }
     } catch (error) {
-      toast.error("Error in adding Sleep track in database");
+      toast.error("Error in adding Steps track in database");
       console.log(error);
     }
   };
 
-  const deleteSleepTrack = async (item: any) => {
+  const deleteStepsTrack = async (item: any) => {
     try {
       const response = await fetch(
-        process.env.NEXT_PUBLIC_BACKEND_API + "/sleeptrack/deletesleepentry",
+        process.env.NEXT_PUBLIC_BACKEND_API + "/steptrack/deletestepentry",
         {
           method: "DELETE",
           headers: {
@@ -112,21 +112,21 @@ const SleepPopup: React.FC<SleepPopupProps> = ({ setShowSleepPopup }) => {
 
       const data = await response.json();
       if (data.ok) {
-        console.log(data.data, "Sleep data data for data");
-        toast.success("Sleep track deleted successfully");
-        getSleepTrack();
+        console.log(data.data, "Steps data data for data");
+        toast.success("Steps item deleted successfully");
+        getStepsTrack();
       } else {
-        toast.error("Error in deleting Sleep");
+        toast.error("Error in deleting Steps");
         console.log(data);
       }
     } catch (error) {
-      toast.error("Error in deleting Sleep in database");
+      toast.error("Error in deleting Steps in database");
       console.log(error);
     }
   };
 
   React.useEffect(() => {
-    getSleepTrack();
+    getStepsTrack();
   }, [date]);
 
   return (
@@ -135,7 +135,7 @@ const SleepPopup: React.FC<SleepPopupProps> = ({ setShowSleepPopup }) => {
         <button
           className="close"
           onClick={() => {
-            setShowSleepPopup(false);
+            setShowStepsPopup(false);
           }}
         >
           <AiOutlineClose />
@@ -150,19 +150,19 @@ const SleepPopup: React.FC<SleepPopupProps> = ({ setShowSleepPopup }) => {
         </LocalizationProvider>
         <TextField
           id="outlined-basic"
-          label="Sleep Duration (in Hrs)"
+          label="Total No of Steps"
           type="number"
           variant="outlined"
           color="warning"
           onChange={(e) => {
-            setSleep({
-              ...sleep,
-              durationInHrs: e.target.value,
+            setSteps({
+              ...steps,
+              steps: e.target.value,
             });
           }}
         />
 
-        <Button variant="contained" onClick={saveSleepTrack}>
+        <Button variant="contained" onClick={saveStepsTrack}>
           Save
         </Button>
         <div className="hrline"></div>
@@ -171,10 +171,12 @@ const SleepPopup: React.FC<SleepPopupProps> = ({ setShowSleepPopup }) => {
             return (
               <div className="item">
                 <div>{item.date}</div>
-                <div>{item.durationInHrs}{item.unit}</div>
+                <div>
+                  {item.steps} 
+                </div>
                 <button
                   onClick={() => {
-                    deleteSleepTrack(item);
+                    deleteStepsTrack(item);
                   }}
                 >
                   Delete
@@ -189,4 +191,4 @@ const SleepPopup: React.FC<SleepPopupProps> = ({ setShowSleepPopup }) => {
   );
 };
 
-export default SleepPopup;
+export default StepsPopup;

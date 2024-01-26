@@ -9,11 +9,11 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { toast } from "react-toastify";
 
-interface SleepPopupProps {
-  setShowSleepPopup: React.Dispatch<React.SetStateAction<boolean>>;
+interface WaterPopupProps {
+  setShowWaterPopup: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const SleepPopup: React.FC<SleepPopupProps> = ({ setShowSleepPopup }) => {
+const WaterPopup: React.FC<WaterPopupProps> = ({ setShowWaterPopup }) => {
   const color = "#ffc20e";
 
   const [date, setDate] = React.useState<any>(dayjs(new Date()));
@@ -22,20 +22,20 @@ const SleepPopup: React.FC<SleepPopupProps> = ({ setShowSleepPopup }) => {
     setDate(val);
   };
 
-  const [sleep, setSleep] = React.useState<any>({
+  const [water, setWater] = React.useState<any>({
     date: "",
-    durationInHrs: "",
+    amountInMilliliters: "",
   });
 
   const [items, setItems] = React.useState<any>([]);
 
-  const saveSleepTrack = async () => {
+  const saveWaterTrack = async () => {
     let tempdate = date.format("YYYY-MM-DD");
     let finaldatetime = new Date(tempdate);
 
     try {
       const response = await fetch(
-        process.env.NEXT_PUBLIC_BACKEND_API + "/sleeptrack/addsleepentry",
+        process.env.NEXT_PUBLIC_BACKEND_API + "/watertrack/addwaterentry",
         {
           method: "POST",
           headers: {
@@ -44,30 +44,30 @@ const SleepPopup: React.FC<SleepPopupProps> = ({ setShowSleepPopup }) => {
           credentials: "include",
           body: JSON.stringify({
             date: finaldatetime,
-            durationInHrs: sleep.durationInHrs,
+            amountInMilliliters: water.amountInMilliliters,
           }),
         }
       );
 
       const data = await response.json();
       if (response.ok) {
-        toast.success("Sleep Track added successfully");
-        getSleepTrack();
+        toast.success("Water Track added successfully");
+        getWaterTrack();
       } else {
-        toast.error("Error in adding Sleep Track");
+        toast.error("Error in adding Water Track");
         console.log(data);
       }
     } catch (error) {
-      toast.error("Error in adding Sleep Track in database");
+      toast.error("Error in adding Water Track in database");
       console.log(error);
     }
   };
 
-  const getSleepTrack = async () => {
+  const getWaterTrack = async () => {
     setItems([]);
     try {
       const response = await fetch(
-        process.env.NEXT_PUBLIC_BACKEND_API + "/sleeptrack/getsleepbydate",
+        process.env.NEXT_PUBLIC_BACKEND_API + "/watertrack/getwaterbydate",
         {
           method: "POST",
           headers: {
@@ -82,22 +82,22 @@ const SleepPopup: React.FC<SleepPopupProps> = ({ setShowSleepPopup }) => {
 
       const data = await response.json();
       if (data.ok) {
-        console.log(data.data, "Sleep track data data for data");
+        console.log(data.data, "Sleep water data")
         setItems(data.data);
       } else {
-        toast.error("Error in Sleep track");
+        toast.error("Error in Water track");
         console.log(data);
       }
     } catch (error) {
-      toast.error("Error in adding Sleep track in database");
+      toast.error("Error in adding Water track in database");
       console.log(error);
     }
   };
 
-  const deleteSleepTrack = async (item: any) => {
+  const deleteWaterTrack = async (item: any) => {
     try {
       const response = await fetch(
-        process.env.NEXT_PUBLIC_BACKEND_API + "/sleeptrack/deletesleepentry",
+        process.env.NEXT_PUBLIC_BACKEND_API + "/watertrack/deletewaterentry",
         {
           method: "DELETE",
           headers: {
@@ -112,21 +112,21 @@ const SleepPopup: React.FC<SleepPopupProps> = ({ setShowSleepPopup }) => {
 
       const data = await response.json();
       if (data.ok) {
-        console.log(data.data, "Sleep data data for data");
-        toast.success("Sleep track deleted successfully");
-        getSleepTrack();
+        console.log(data.data, "Water track data data for data");
+        toast.success("Calorie Intake item deleted successfully");
+        getWaterTrack();
       } else {
-        toast.error("Error in deleting Sleep");
+        toast.error("Error in deleting Water track");
         console.log(data);
       }
     } catch (error) {
-      toast.error("Error in deleting Sleep in database");
+      toast.error("Error in deleting Water track in database");
       console.log(error);
     }
   };
 
   React.useEffect(() => {
-    getSleepTrack();
+    getWaterTrack();
   }, [date]);
 
   return (
@@ -135,7 +135,7 @@ const SleepPopup: React.FC<SleepPopupProps> = ({ setShowSleepPopup }) => {
         <button
           className="close"
           onClick={() => {
-            setShowSleepPopup(false);
+            setShowWaterPopup(false);
           }}
         >
           <AiOutlineClose />
@@ -150,19 +150,19 @@ const SleepPopup: React.FC<SleepPopupProps> = ({ setShowSleepPopup }) => {
         </LocalizationProvider>
         <TextField
           id="outlined-basic"
-          label="Sleep Duration (in Hrs)"
+          label="Water Consumed (in ml)"
           type="number"
           variant="outlined"
           color="warning"
           onChange={(e) => {
-            setSleep({
-              ...sleep,
-              durationInHrs: e.target.value,
+            setWater({
+              ...water,
+              amountInMilliliters: e.target.value,
             });
           }}
         />
 
-        <Button variant="contained" onClick={saveSleepTrack}>
+        <Button variant="contained" onClick={saveWaterTrack}>
           Save
         </Button>
         <div className="hrline"></div>
@@ -171,10 +171,10 @@ const SleepPopup: React.FC<SleepPopupProps> = ({ setShowSleepPopup }) => {
             return (
               <div className="item">
                 <div>{item.date}</div>
-                <div>{item.durationInHrs}{item.unit}</div>
+                <div>{item.amountInMilliliters}ml</div>
                 <button
                   onClick={() => {
-                    deleteSleepTrack(item);
+                    deleteWaterTrack(item);
                   }}
                 >
                   Delete
@@ -189,4 +189,4 @@ const SleepPopup: React.FC<SleepPopupProps> = ({ setShowSleepPopup }) => {
   );
 };
 
-export default SleepPopup;
+export default WaterPopup;

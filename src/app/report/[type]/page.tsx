@@ -5,6 +5,8 @@ import "./ReportPage.css";
 import { AiFillEdit } from "react-icons/ai";
 import CalorieIntakePopup from "@/components/ReportFormPopup/CalorieIntake/CalorieIntakePopup";
 import SleepPopup from "@/components/ReportFormPopup/Sleep/SleepPopup";
+import StepsPopup from "@/components/ReportFormPopup/Steps/StepsPopup";
+import WaterPopup from "@/components/ReportFormPopup/Water/WaterPopup";
 import { usePathname } from "next/navigation";
 
 const page = () => {
@@ -106,7 +108,91 @@ const page = () => {
         console.log(error);
       }
     } else if (pathName == "/report/Sleep") {
-      alert("Get Data for sleep");
+      try {
+        const response = await fetch(
+          process.env.NEXT_PUBLIC_BACKEND_API + "/sleeptrack/getsleepbylimit",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({
+              limit: 10,
+            }),
+          }
+        );
+
+        const data = await response.json();
+        if (data.ok) {
+          let temp = data.data.map((item: any) => {
+            return {
+              date: new Date(item.date),
+              value: item.durationInHrs,
+              unit: "Hr",
+            };
+          });
+
+          // Aggregate data by day using filter
+          let result = temp.reduce((accumulator: any[], currentItem: any) => {
+            const existingItem = accumulator.find(
+              (item) => item.date.getDate() === currentItem.date.getDate()
+            );
+
+            if (existingItem) {
+              // If the day already exists in accumulator, increment the calorieIntake value
+              existingItem.value += currentItem.value;
+            } else {
+              // If the day doesn't exist, add the item to accumulator
+              accumulator.push({
+                date: currentItem.date,
+                value: currentItem.value,
+                unit: "Hr",
+              });
+            }
+
+            return accumulator;
+          }, []);
+
+          // Now result contains objects with incremented calorieIntake values for the same day
+          let dataForXAxis = result.map((item: any) => item.date);
+          let dataForLineChart = result.map((item: any) =>
+            JSON.stringify(item.value)
+          );
+
+          console.log(temp);
+
+          console.log({
+            data: dataForLineChart,
+            title: "1 Day Calorie Intake",
+            color: color,
+            xAxis: {
+              data: dataForXAxis,
+              label: "Last 10 Days",
+              scaleType: "time",
+            },
+          });
+
+          setDataS1({
+            data: dataForLineChart,
+            title: "1 Day Calorie Intake",
+            color: color,
+            xAxis: {
+              data: dataForXAxis,
+              label: "Last 10 Days",
+              scaleType: "time",
+            },
+          });
+        } else {
+          setDataS1([]);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    } else if (pathName == "/report/Steps"){
+      
+    } else if (pathName == "/report/Water"){
+
     }
   };
 
@@ -117,6 +203,8 @@ const page = () => {
   const [showCalorieIntakePopup, setShowCalorieIntakePopup] =
     React.useState<boolean>(false);
   const [showSleepPopup, setShowSleepPopup] = React.useState<boolean>(false);
+  const [showStepsPopup, setShowStepsPopup] = React.useState<boolean>(false);
+  const [showWaterPopup, setShowWaterPopup] = React.useState<boolean>(false);
 
   return (
     <div className="reportpage">
@@ -152,6 +240,10 @@ const page = () => {
             setShowCalorieIntakePopup(true);
           } else if (pathName == "/report/Sleep") {
             setShowSleepPopup(true);
+          } else if (pathName == "/report/Steps") {
+            setShowStepsPopup(true);
+          } else if (pathName == "/report/Water") {
+            setShowWaterPopup(true);
           } else {
             alert("Show other popups");
           }
@@ -165,6 +257,8 @@ const page = () => {
         />
       )}
       {showSleepPopup && <SleepPopup setShowSleepPopup={setShowSleepPopup} />}
+      {showStepsPopup && <StepsPopup setShowStepsPopup={setShowStepsPopup} />}
+      {showWaterPopup && <WaterPopup setShowWaterPopup={setShowWaterPopup} />}
     </div>
   );
 };
