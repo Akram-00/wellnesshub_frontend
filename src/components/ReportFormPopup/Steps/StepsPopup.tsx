@@ -21,7 +21,7 @@ const StepsPopup: React.FC<StepsPopupProps> = ({ setShowStepsPopup }) => {
   const selectedDay = (val: any) => {
     setDate(val);
   };
- b
+ 
   const [steps, setSteps] = React.useState<any>({
     date: "",
     steps: "",

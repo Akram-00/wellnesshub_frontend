@@ -9,11 +9,11 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { toast } from "react-toastify";
 
-interface WaterPopupProps {
-  setShowWaterPopup: React.Dispatch<React.SetStateAction<boolean>>;
+interface WeightPopupProps {
+  setShowWeightPopup: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const WaterPopup: React.FC<WaterPopupProps> = ({ setShowWaterPopup }) => {
+const WeightPopup: React.FC<WeightPopupProps> = ({ setShowWeightPopup }) => {
   const color = "#ffc20e";
 
   const [date, setDate] = React.useState<any>(dayjs(new Date()));
@@ -22,20 +22,20 @@ const WaterPopup: React.FC<WaterPopupProps> = ({ setShowWaterPopup }) => {
     setDate(val);
   };
 
-  const [water, setWater] = React.useState<any>({
+  const [weight, setWeight] = React.useState<any>({
     date: "",
-    amountInMilliliters: 0,
+    weightInKg: 0,
   });
 
   const [items, setItems] = React.useState<any>([]);
 
-  const saveWaterTrack = async () => {
+  const saveWeightTrack = async () => {
     let tempdate = date.format("YYYY-MM-DD");
     let finaldatetime = new Date(tempdate);
 
     try {
       const response = await fetch(
-        process.env.NEXT_PUBLIC_BACKEND_API + "/watertrack/addwaterentry",
+        process.env.NEXT_PUBLIC_BACKEND_API + "/weighttrack/addweightentry",
         {
           method: "POST",
           headers: {
@@ -44,30 +44,30 @@ const WaterPopup: React.FC<WaterPopupProps> = ({ setShowWaterPopup }) => {
           credentials: "include",
           body: JSON.stringify({
             date: finaldatetime,
-            amountInMilliliters: water.amountInMilliliters,
+            weightInKg: weight.weightInKg,
           }),
         }
       );
 
       const data = await response.json();
       if (response.ok) {
-        toast.success("Water Track added successfully");
-        getWaterTrack();
+        toast.success("Weight Track added successfully");
+        getWeightTrack();
       } else {
-        toast.error("Error in adding Water Track");
+        toast.error("Error in adding Weight Track");
         console.log(data);
       }
     } catch (error) {
-      toast.error("Error in adding Water Track in database");
+      toast.error("Error in adding Weight Track in database");
       console.log(error);
     }
   };
 
-  const getWaterTrack = async () => {
+  const getWeightTrack = async () => {
     setItems([]);
     try {
       const response = await fetch(
-        process.env.NEXT_PUBLIC_BACKEND_API + "/watertrack/getwaterbydate",
+        process.env.NEXT_PUBLIC_BACKEND_API + "/weighttrack/getweightbydate",
         {
           method: "POST",
           headers: {
@@ -82,22 +82,22 @@ const WaterPopup: React.FC<WaterPopupProps> = ({ setShowWaterPopup }) => {
 
       const data = await response.json();
       if (data.ok) {
-        console.log(data.data, "Sleep water data")
+        console.log(data.data, "Sleep Weight data")
         setItems(data.data);
       } else {
-        toast.error("Error in Water track");
+        toast.error("Error in Weight track");
         console.log(data);
       }
     } catch (error) {
-      toast.error("Error in adding Water track in database");
+      toast.error("Error in adding Weight track in database");
       console.log(error);
     }
   };
 
-  const deleteWaterTrack = async (item: any) => {
+  const deleteWeightTrack = async (item: any) => {
     try {
       const response = await fetch(
-        process.env.NEXT_PUBLIC_BACKEND_API + "/watertrack/deletewaterentry",
+        process.env.NEXT_PUBLIC_BACKEND_API + "/weighttrack/deleteweightentry",
         {
           method: "DELETE",
           headers: {
@@ -112,21 +112,21 @@ const WaterPopup: React.FC<WaterPopupProps> = ({ setShowWaterPopup }) => {
 
       const data = await response.json();
       if (data.ok) {
-        console.log(data.data, "Water track data data for data");
+        console.log(data.data, "Weight track data data for data");
         toast.success("Calorie Intake item deleted successfully");
-        getWaterTrack();
+        getWeightTrack();
       } else {
-        toast.error("Error in deleting Water track");
+        toast.error("Error in deleting Weight track");
         console.log(data);
       }
     } catch (error) {
-      toast.error("Error in deleting Water track in database");
+      toast.error("Error in deleting Weight track in database");
       console.log(error);
     }
   };
 
   React.useEffect(() => {
-    getWaterTrack();
+    getWeightTrack();
   }, [date]);
 
   return (
@@ -135,7 +135,7 @@ const WaterPopup: React.FC<WaterPopupProps> = ({ setShowWaterPopup }) => {
         <button
           className="close"
           onClick={() => {
-            setShowWaterPopup(false);
+            setShowWeightPopup(false);
           }}
         >
           <AiOutlineClose />
@@ -150,19 +150,19 @@ const WaterPopup: React.FC<WaterPopupProps> = ({ setShowWaterPopup }) => {
         </LocalizationProvider>
         <TextField
           id="outlined-basic"
-          label="Water Consumed (in ml)"
+          label="Weight Gained (in Kg)"
           type="number"
           variant="outlined"
           color="warning"
           onChange={(e) => {
-            setWater({
-              ...water,
-              amountInMilliliters: e.target.value,
+            setWeight({
+              ...weight,
+              weightInKg: e.target.value,
             });
           }}
         />
 
-        <Button variant="contained" onClick={saveWaterTrack}>
+        <Button variant="contained" onClick={saveWeightTrack}>
           Save
         </Button>
         <div className="hrline"></div>
@@ -174,7 +174,7 @@ const WaterPopup: React.FC<WaterPopupProps> = ({ setShowWaterPopup }) => {
                 <div>{item.amountInMilliliters}ml</div>
                 <button
                   onClick={() => {
-                    deleteWaterTrack(item);
+                    deleteWeightTrack(item);
                   }}
                 >
                   Delete
@@ -189,4 +189,4 @@ const WaterPopup: React.FC<WaterPopupProps> = ({ setShowWaterPopup }) => {
   );
 };
 
-export default WaterPopup;
+export default WeightPopup;

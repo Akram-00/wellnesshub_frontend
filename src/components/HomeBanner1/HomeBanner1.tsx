@@ -62,9 +62,10 @@ const HomeBanner1 = () => {
     );
     
     const responseData = await response.json();
-    console.log(responseData);
     if(responseData.ok){
+      console.log(responseData.data)
       setData(responseData.data);
+
     }else{
       setData([])
     }
