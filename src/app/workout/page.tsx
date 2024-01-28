@@ -17,7 +17,7 @@ const page = () => {
     //   exercises: [
     //     {
     //       exercise: "Flat Bench Press",
-    //       videoUrl: "https://gymvisual.com/img/p/1/7/5/5/2/17552.gif",
+    //       imageUrl: "https://gymvisual.com/img/p/1/7/5/5/2/17552.gif",
     //       sets: 3,
     //       reps: 10,
     //       rest: 60,
@@ -26,7 +26,7 @@ const page = () => {
     //     },
     //     {
     //       exercise: "Incline Bench Press",
-    //       videoUrl: "https://gymvisual.com/img/p/1/0/3/9/8/10398.gif",
+    //       imageUrl: "https://gymvisual.com/img/p/1/0/3/9/8/10398.gif",
     //       sets: 3,
     //       reps: 10,
     //       rest: 60,
@@ -35,7 +35,7 @@ const page = () => {
     //     },
     //     {
     //       exercise: "Decline Bench Press",
-    //       videoUrl: "https://gymvisual.com/img/p/6/5/2/3/6523.gif",
+    //       imageUrl: "https://gymvisual.com/img/p/6/5/2/3/6523.gif",
     //       sets: 3,
     //       reps: 10,
     //       rest: 60,
@@ -49,7 +49,7 @@ const page = () => {
     try {
       const response = await fetch(
         process.env.NEXT_PUBLIC_BACKEND_API +
-          "/workoutplans/workouts" +
+          "/workoutplans/workouts/" +
           workoutid,
         {
           method: "GET",
@@ -84,7 +84,7 @@ const page = () => {
             >
               <h3>{index + 1}</h3>
               <div className="workout__exercise__image">
-                <img src={item.imageUrl} alt="" />
+                <img src={item.imageURL} alt="" />
               </div>
               <div className="workout__exercise__content">
                 <h2>{item.exercise}</h2>
