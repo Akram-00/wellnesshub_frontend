@@ -96,9 +96,10 @@ const HomeBanner2 = () => {
       const data = await response.json();
       if (data.ok) {
         setData(data.data);
+        console.log(data.data)
       } else {
         console.error("Error in generating the workout data");
-        setData;
+        setData([]);
       }
     } catch (error) {
       console.log(error);
@@ -145,15 +146,15 @@ const HomeBanner2 = () => {
                     <div
                       className="swiper-slide"
                       style={{
-                        backgroundImage: `url(${item.imageUrl})`,
+                        backgroundImage: `url(${item.imageURL})`,
                       }}
                       onClick={() => {
-                        window.location.href = `/workout/${item.type}`;
+                        window.location.href = `/workout?id=${item._id}`;
                       }}
                     >
                       <div className="swiper-slide-content">
-                        <h2>{item.type}</h2>
-                        <p>{item.durationInMin}</p>
+                        <h2>{item.name}</h2>
+                        <p>{item.durationInMinutes}</p>
                       </div>
                     </div>
                   </SwiperSlide>
