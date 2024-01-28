@@ -170,8 +170,8 @@ const SleepPopup: React.FC<SleepPopupProps> = ({ setShowSleepPopup }) => {
           {items.map((item: any) => {
             return (
               <div className="item">
-                <div>{item.date}</div>
-                <div>{item.durationInHrs}{item.unit}</div>
+                <div>{dayjs(item.date).format("DD-MM-YYYY")}</div>
+                <div>{item.durationInHrs}Hrs</div> 
                 <button
                   onClick={() => {
                     deleteSleepTrack(item);

@@ -170,8 +170,8 @@ const WaterPopup: React.FC<WaterPopupProps> = ({ setShowWaterPopup }) => {
           {items.map((item: any) => {
             return (
               <div className="item">
-                <div>{item.date}</div>
-                <div>{item.amountInMilliliters}ml</div>
+                <div>{dayjs(item.date).format("DD-MM-YYYY")}</div>
+                <div>{item.amountInMilliliters / 1000} L</div>
                 <button
                   onClick={() => {
                     deleteWaterTrack(item);

@@ -187,9 +187,9 @@ const WorkoutPopup: React.FC<WorkoutPopupProps> = ({ setShowWorkoutPopup }) => {
           {items.map((item: any) => {
             return (
               <div className="item">
-                <div>{item.date}</div>
+                <div>{item.exercise}</div>
                 <div>
-                  {item.exercise} {item.durationInMinutes}
+                  {item.durationInMinutes} min
                 </div>
                 <button
                   onClick={() => {

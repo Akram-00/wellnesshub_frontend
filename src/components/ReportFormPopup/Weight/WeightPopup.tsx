@@ -170,8 +170,8 @@ const WeightPopup: React.FC<WeightPopupProps> = ({ setShowWeightPopup }) => {
           {items.map((item: any) => {
             return (
               <div className="item">
-                <div>{item.date}</div>
-                <div>{item.amountInMilliliters}ml</div>
+                <div>{dayjs(item.date).format("DD-MM-YYYY")}</div>
+                <div>{item.weight} kgs</div>
                 <button
                   onClick={() => {
                     deleteWeightTrack(item);

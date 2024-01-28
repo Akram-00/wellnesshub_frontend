@@ -170,10 +170,8 @@ const StepsPopup: React.FC<StepsPopupProps> = ({ setShowStepsPopup }) => {
           {items.map((item: any) => {
             return (
               <div className="item">
-                <div>{item.date}</div>
-                <div>
-                  {item.steps} 
-                </div>
+                <div>{dayjs(item.date).format("DD-MM-YYYY")}</div>
+                <div>{item.steps} Steps</div>
                 <button
                   onClick={() => {
                     deleteStepsTrack(item);
