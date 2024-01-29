@@ -9,7 +9,7 @@ import AuthPopup from "../AuthPopup/AuthPopup";
 
 const Navbar = () => {
   const [isLoggedin, setIsloggedin] = React.useState<boolean>(false);
-
+  const [userId, setUserId] = React.useState<boolean>()
   const [showpopup, setShowpopup] = React.useState<boolean>(false);
 
   const checkLogin = async () => {
@@ -22,6 +22,7 @@ const Navbar = () => {
         console.log(data);
         if (data.ok) {
           setIsloggedin(true);
+          setUserId(data.userid)
         } else {
           setIsloggedin(false);
         }
@@ -65,14 +66,18 @@ const Navbar = () => {
     checkLogin();
   }, [showpopup]);
 
+
+
   return (
     <nav>
       <Image src={Logo} alt="logo" />
       <Link href="/">Home</Link>
       <Link href="/about">About</Link>
-      <Link href="/profile">
-        <IoIosBody />
-      </Link>
+      {isLoggedin && (
+        <Link href={`/user?${userId}`}>
+          <IoIosBody />
+        </Link>
+      )}
       {isLoggedin ? (
         <button
           onClick={async ()=>{
