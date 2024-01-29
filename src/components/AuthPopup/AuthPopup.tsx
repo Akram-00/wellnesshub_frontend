@@ -131,6 +131,7 @@ const AuthPopup: React.FC<AuthPopupProps> = ({ setShowpopup }) => {
         if (data.ok) {
           toast.success(data.message);
           setShowpopup(false);
+          window.location.reload();
         } else {
           toast.error(data.message);
         }
@@ -139,6 +140,7 @@ const AuthPopup: React.FC<AuthPopupProps> = ({ setShowpopup }) => {
         console.log(err);
       });
   };
+
   const handleSignup = () => {
     console.log(signupformData);
 
