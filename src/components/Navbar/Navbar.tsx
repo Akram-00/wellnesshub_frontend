@@ -31,6 +31,36 @@ const Navbar = () => {
       });
   };
 
+  const handleLogout = async () => {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/auth/logout`, {
+      method: 'POST',
+      credentials: 'include', // Include credentials (cookies)
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      // body: JSON.stringify(anyDataYouWantToSend), // You can include a request body if needed
+    });
+
+    if (response.ok) {
+      // Logout was successful
+      // Clear any client-side storage or state related to authentication if needed
+
+      // Reload the page
+      window.location.reload();
+    } else {
+      // Logout failed, handle the error
+      const errorData = await response.json(); // You can extract more information from the error response if needed
+      console.error('Logout failed:', errorData);
+      // Handle logout failure, maybe show an error message to the user
+    }
+  } catch (error) {
+    console.error('Logout failed', error);
+    // Handle logout failure, maybe show an error message to the user
+  }
+};
+
+
   React.useEffect(() => {
     checkLogin();
   }, [showpopup]);
@@ -44,7 +74,12 @@ const Navbar = () => {
         <IoIosBody />
       </Link>
       {isLoggedin ? (
-        <button>Logout</button>
+        <button
+          onClick={async ()=>{
+            await handleLogout()
+            setIsloggedin(false)
+          }}
+        >Logout</button>
       ) : (
         <button
           onClick={() => {
