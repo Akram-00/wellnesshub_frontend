@@ -74,7 +74,7 @@ const Navbar = () => {
       <Link href="/">Home</Link>
       <Link href="/about">About</Link>
       {isLoggedin && (
-        <Link href={`/user?${userId}`}>
+        <Link href={`/user?id=${userId}`}>
           <IoIosBody />
         </Link>
       )}
