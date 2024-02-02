@@ -48,7 +48,11 @@ const Navbar = () => {
       // Clear any client-side storage or state related to authentication if needed
 
       // Reload the page
-      window.location.reload();
+      if(window.location.href === '/'){
+        window.location.reload();
+      }else{
+        window.location.href = '/'
+      }
     } else {
       // Logout failed, handle the error
       const errorData = await response.json(); // You can extract more information from the error response if needed
