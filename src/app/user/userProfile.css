@@ -97,6 +97,7 @@
 .box .box-image {
   width: 20%;
   object-fit:contain;
+  height:40%
 }
 
 .tabs{
