@@ -6,7 +6,6 @@
   box-sizing: border-box;
 }
 
-
 ::-webkit-scrollbar {
   display: none;
 }
@@ -18,8 +17,6 @@
   background: #222326;
   color: #ffff00;
 }
-
-
 
 .profile-name {
   font-family: "Poppins", sans-serif;
@@ -34,10 +31,12 @@
   gap: 1rem;
 }
 
-.profile-content .left .profile-image{
-  width:50%;
-  height:35%;
-  border-radius:50%;
+.profile-content .left .profile-image {
+  width: 50%;
+  object-fit: cover;
+  /* object-fit: scale-down; */
+  height: 37%;
+  border-radius: 50%;
 }
 
 .left {
@@ -67,7 +66,7 @@
   display: flex;
   gap: 1.5rem;
   width: 99%;
-  height:40%;
+  height: 40%;
 }
 
 .stats-container .box {
@@ -96,17 +95,17 @@
 
 .box .box-image {
   width: 20%;
-  object-fit:contain;
-  height:40%
+  object-fit: contain;
+  height: 40%;
 }
 
-.tabs{
-   display: flex;
-   flex-direction: column;
-   height: 60%;
-    justify-content: space-between;
-    align-items: center;
-  }
+.tabs {
+  display: flex;
+  flex-direction: column;
+  height: 60%;
+  justify-content: space-between;
+  align-items: center;
+}
 
 .changepassword {
   width: 99%;
@@ -121,5 +120,3 @@
   box-shadow: 6px 2px 12px 1px #030303;
   cursor: pointer;
 }
-
-
