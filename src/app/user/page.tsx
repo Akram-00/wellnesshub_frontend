@@ -119,13 +119,13 @@ const page = () => {
                 </div>
               </div>
               <div className="changepassword">
-                <p>EDIT USER PROFILE</p>
+                <p>SET NEW GOAL</p>
                 <div>
                   <Image src={RightArrow} alt="" />
                 </div>
               </div>
               <div className="changepassword">
-                <p>GET YOUR REPORT IN PDF</p>
+                <p>SET USER PROFILE</p>
                 <div>
                   <Image src={RightArrow} alt="" />
                 </div>
