@@ -15,6 +15,21 @@ const page = () => {
 
   const [data, setData] = React.useState<any>();
 
+  const bmiCalculator = (weight: number, height: number) => {
+    let bmiStatus = "";
+    const bmi = weight / ((height / 100) * (height / 100));
+    if (bmi < 18.5) {
+      bmiStatus = "Underweight";
+    } else if (bmi >= 18.5 && bmi < 25) {
+      bmiStatus = "Normal weight";
+    } else if (bmi >= 25 && bmi < 30) {
+      bmiStatus = "Overweight";
+    } else {
+      bmiStatus = "Obese";
+    }
+    return { bmi, bmiStatus };
+  };
+
   const handleUserData = (data: any) => {
     const initialWeightKg = data.weight[0].weight; // Initial weight in kilograms
     const finalWeightKg = data.weight[data.weight.length - 1].weight; // Final weight in kilograms
@@ -52,7 +67,11 @@ const page = () => {
         0
       ) / 60;
     const noOfWorkouts = data.workouts.length;
-    const newData = { ...data, userWeight, workoutHours, noOfWorkouts };
+    const bmi = bmiCalculator(
+      data.weight[data.weight.length - 1].weight,
+      data.height[0].height
+    );
+    const newData = { ...data, userWeight, workoutHours, noOfWorkouts, bmi };
     return newData;
   };
 
@@ -88,10 +107,18 @@ const page = () => {
       {data && (
         <div className="profile-content">
           <div className="left">
-            <Image src={DefaultProfile} alt="" className="profile-image" />
-            <h5 className="profile-name">{data.name}</h5>
-            <h5 className="profile-name">{data.email}</h5>
-            <h5 className="profile-name">{data.age}</h5>
+            <div className="profile-picture-name">
+              <Image src={DefaultProfile} alt="" className="profile-image" />
+              <h5 className="profile-name">{data.name}</h5>
+            </div>
+            <h6 className="profile-name">Email : {data.email}</h6>
+            <h6 className="profile-name">Goal : {data.goal}</h6>
+            <h6 className="profile-name">
+              Weight : {data.weight[data.weight.length - 1].weight}
+            </h6>
+            <h6 className="profile-name">Height : {data.height[0].height}</h6>
+            <h6 className="profile-name">BMI : {data.bmi.bmi.toFixed(2)}</h6>
+            <h6 className="profile-name">BMI : {data.bmi.bmiStatus}</h6>
           </div>
           <div className="right">
             <div className="stats-container">

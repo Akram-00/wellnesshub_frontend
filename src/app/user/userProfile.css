@@ -23,6 +23,10 @@
   font-size: 1.3rem;
 }
 
+.profile-picture-name{
+  
+}
+
 .profile-content {
   height: 100%;
   display: flex;
@@ -32,10 +36,7 @@
 }
 
 .profile-content .left .profile-image {
-  width: 50%;
-  object-fit: cover;
-  /* object-fit: scale-down; */
-  height: 37%;
+
   border-radius: 50%;
 }
 
