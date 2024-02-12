@@ -23,8 +23,7 @@
   font-size: 1.3rem;
 }
 
-.profile-picture-name{
-  
+.profile-picture-name {
 }
 
 .profile-content {
@@ -36,7 +35,6 @@
 }
 
 .profile-content .left .profile-image {
-
   border-radius: 50%;
 }
 
@@ -110,14 +108,14 @@
   box-shadow: 6px 2px 12px 1px #030303;
 }
 
-.changepassword {
+.user-profile-setting {
   border-bottom: 1px solid #030303;
   width: 100%;
   display: flex;
   align-items: center;
   padding: 1em;
   font-family: "Poppins", sans-serif;
-  height: 20%;
+  /* height: 20%; */
   justify-content: space-between;
   /* border-radius: 3%; */
   text-align: center;

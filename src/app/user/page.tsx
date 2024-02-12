@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import "./userProfile.css";
 import Image from "next/image";
@@ -8,6 +8,73 @@ import RightArrow from "../../assets/right-arrow.svg";
 import Weight from "../../assets/weight-scale.svg";
 import Hour from "../../assets/hourglass.svg";
 import Workout from "../../assets/gym.svg";
+import {
+  ChangePassword,
+  DeleteUser,
+  ResetUserData,
+  UploadImage,
+} from "@/components/UserPopup";
+
+const bmiCalculator = (weight: number, height: number) => {
+  let bmiStatus = "";
+  const bmi = weight / ((height / 100) * (height / 100));
+  if (bmi < 18.5) {
+    bmiStatus = "Underweight";
+  } else if (bmi >= 18.5 && bmi < 25) {
+    bmiStatus = "Normal weight";
+  } else if (bmi >= 25 && bmi < 30) {
+    bmiStatus = "Overweight";
+  } else {
+    bmiStatus = "Obese";
+  }
+  return { bmi, bmiStatus };
+};
+
+const handleUserData = (data: any) => {
+  const initialWeightKg = data.weight[0].weight; // Initial weight in kilograms
+  const finalWeightKg = data.weight[data.weight.length - 1].weight; // Final weight in kilograms
+  const userGoal = data.goal; // Assuming data.userGoal contains the user's goal
+
+  const weightDifferenceKg = Math.abs(finalWeightKg - initialWeightKg).toFixed(
+    2
+  );
+
+  let userWeight;
+
+  switch (userGoal) {
+    case "weightLoss":
+      userWeight = {
+        weight: weightDifferenceKg,
+        userStatus: "Weight Lossed",
+      };
+      break;
+    case "weightGain":
+      userWeight = {
+        weight: weightDifferenceKg,
+        userStatus: "Weight Gained",
+      };
+      break;
+    case "maintainCurrentWeight":
+      userWeight = "Maintaining Current Weight";
+      break;
+    default:
+      userWeight = "Invalid user goal";
+  }
+
+  const workoutHours =
+    data.workouts.reduce(
+      (sum: any, obj: any) => sum + obj.durationInMinutes,
+      0
+    ) / 60;
+  const noOfWorkouts = data.workouts.length;
+  const bmi = bmiCalculator(
+    data.weight[data.weight.length - 1].weight,
+    data.height[0].height
+  );
+  let age = new Date().getFullYear() - new Date(data.dob).getFullYear();
+  const newData = { ...data, userWeight, workoutHours, noOfWorkouts, bmi, age };
+  return newData;
+};
 
 const page = () => {
   const searchParams = useSearchParams();
@@ -15,65 +82,25 @@ const page = () => {
 
   const [data, setData] = React.useState<any>();
 
-  const bmiCalculator = (weight: number, height: number) => {
-    let bmiStatus = "";
-    const bmi = weight / ((height / 100) * (height / 100));
-    if (bmi < 18.5) {
-      bmiStatus = "Underweight";
-    } else if (bmi >= 18.5 && bmi < 25) {
-      bmiStatus = "Normal weight";
-    } else if (bmi >= 25 && bmi < 30) {
-      bmiStatus = "Overweight";
-    } else {
-      bmiStatus = "Obese";
-    }
-    return { bmi, bmiStatus };
-  };
+  // Popups state
+  const [changePassword, setChangePassword] = useState<boolean>(false);
+  const [deleteUser, setDeleteUser] = useState<boolean>(false);
+  const [resetUserData, setResetUserData] = useState<boolean>(false);
+  const [uploadImage, setUploadImage] = useState<boolean>(false);
 
-  const handleUserData = (data: any) => {
-    const initialWeightKg = data.weight[0].weight; // Initial weight in kilograms
-    const finalWeightKg = data.weight[data.weight.length - 1].weight; // Final weight in kilograms
-    const userGoal = data.goal; // Assuming data.userGoal contains the user's goal
+  // popup handler
 
-    const weightDifferenceKg = Math.abs(
-      finalWeightKg - initialWeightKg
-    ).toFixed(2);
-
-    let userWeight;
-
-    switch (userGoal) {
-      case "weightLoss":
-        userWeight = {
-          weight: weightDifferenceKg,
-          userStatus: "Weight Lossed",
-        };
-        break;
-      case "weightGain":
-        userWeight = {
-          weight: weightDifferenceKg,
-          userStatus: "Weight Gained",
-        };
-        break;
-      case "maintainCurrentWeight":
-        userWeight = "Maintaining Current Weight";
-        break;
-      default:
-        userWeight = "Invalid user goal";
-    }
-
-    const workoutHours =
-      data.workouts.reduce(
-        (sum: any, obj: any) => sum + obj.durationInMinutes,
-        0
-      ) / 60;
-    const noOfWorkouts = data.workouts.length;
-    const bmi = bmiCalculator(
-      data.weight[data.weight.length - 1].weight,
-      data.height[0].height
-    );
-    const newData = { ...data, userWeight, workoutHours, noOfWorkouts, bmi };
-    return newData;
-  };
+    const handleClick = (
+      setter: React.Dispatch<React.SetStateAction<boolean>>
+    ) => {
+      // Set all other state variables to false
+      setChangePassword(false);
+      setDeleteUser(false);
+      setResetUserData(false);
+      setUploadImage(false);
+      // Set the clicked state variable to true
+      setter(true);
+    };
 
   const getData = async () => {
     try {
@@ -112,6 +139,7 @@ const page = () => {
               <h5 className="profile-name">{data.name}</h5>
             </div>
             <h6 className="profile-name">Email : {data.email}</h6>
+            <h6 className="profile-name">Age : {data.age}</h6>
             <h6 className="profile-name">Goal : {data.goal}</h6>
             <h6 className="profile-name">
               Weight : {data.weight[data.weight.length - 1].weight}
@@ -139,25 +167,45 @@ const page = () => {
               </div>
             </div>
             <div className="tabs">
-              <div className="changepassword">
+              <div
+                className="user-profile-setting"
+                onClick={() => {
+                  handleClick(setUploadImage)
+                }}
+              >
+                <p>UPLOAD PROFILE IMAGE</p>
+                <div>
+                  <Image src={RightArrow} alt="" />
+                </div>
+              </div>
+              <div
+                className="user-profile-setting"
+                onClick={() => {
+                  handleClick(setChangePassword)
+                }}
+              >
                 <p>CHANGE PASSWORD</p>
                 <div>
                   <Image src={RightArrow} alt="" />
                 </div>
               </div>
-              <div className="changepassword">
-                <p>SET NEW GOAL</p>
+              <div
+                className="user-profile-setting"
+                onClick={() => {
+                  handleClick(setResetUserData)
+                }}
+              >
+                <p>RESET ALL DATA</p>
                 <div>
                   <Image src={RightArrow} alt="" />
                 </div>
               </div>
-              <div className="changepassword">
-                <p>SET USER PROFILE</p>
-                <div>
-                  <Image src={RightArrow} alt="" />
-                </div>
-              </div>
-              <div className="changepassword">
+              <div
+                className="user-profile-setting"
+                onClick={() => {
+                  handleClick(setDeleteUser)
+                }}
+              >
                 <p>DELELTE THE ACCOUNT</p>
                 <div>
                   <Image src={RightArrow} alt="" />
@@ -167,6 +215,10 @@ const page = () => {
           </div>
         </div>
       )}
+      {changePassword && <ChangePassword setChangePassword={setChangePassword} />}
+      {deleteUser && <DeleteUser setDeleteUser={setDeleteUser} />}
+      {resetUserData && <ResetUserData setResetUserData={setResetUserData} />}
+      {uploadImage && <UploadImage setUploadImage={setUploadImage} />}
     </div>
   );
 };
