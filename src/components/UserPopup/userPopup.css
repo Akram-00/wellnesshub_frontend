@@ -9,17 +9,17 @@
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1000;
-}
+} 
 .popupbox {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 10px;  
   background-color: white;
-  color:black;
+  color:black; 
   width: 500px;
   max-height: 80%;
-  padding: 20px;
+  padding: 1.5rem; 
   border-radius: 10px;
   overflow: scroll;
 }
@@ -35,8 +35,14 @@
   cursor: pointer;
   line-height: 0;
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 5px;
+  right: 5px;
   transition: 0.3s;
   z-index: 1001;
+}
+
+.confirmation-message p {
+  text-align:center;
+  font-size : 1.3rem;
+  font-family:'PT Sans';
 }

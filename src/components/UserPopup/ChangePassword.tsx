@@ -1,4 +1,5 @@
 import React from "react";
+import { toast } from "react-toastify";
 import "./userPopup.css";
 import { AiFillDelete, AiOutlineClose } from "react-icons/ai";
 import Button from "@mui/material/Button";
@@ -16,7 +17,33 @@ const ChangePassword: React.FC<ChangePasswordPopupProps> = ({
   });
 
   const changePassword = async () => {
-    console.log(password);
+    try {
+      const response = await fetch(
+        process.env.NEXT_PUBLIC_BACKEND_API + "/auth/changepassword",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            oldPassword: password.oldPassword,
+            newPassword: password.newPassword,
+          }),
+        }
+      );
+
+      const data = await response.json();
+      if (data.ok) {
+        console.log(data.data, "Password changed successfully");
+        toast.success("Password changed successfully");
+      } else {
+        toast.error("Cannot Change password");
+      }
+    } catch (error) {
+      toast.error("Error in changing password");
+      console.log(error);
+    }
   };
   return (
     <div className="popupout">
