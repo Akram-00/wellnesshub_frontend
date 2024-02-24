@@ -9,7 +9,7 @@ import AuthPopup from "../AuthPopup/AuthPopup";
 
 const Navbar = () => {
   const [isLoggedin, setIsloggedin] = React.useState<boolean>(false);
-  const [userId, setUserId] = React.useState<boolean>()
+  const [userId, setUserId] = React.useState<any>()
   const [showpopup, setShowpopup] = React.useState<boolean>(false);
 
   const checkLogin = async () => {
@@ -63,7 +63,7 @@ const Navbar = () => {
     console.error('Logout failed', error);
     // Handle logout failure, maybe show an error message to the user
   }
-};
+  };
 
 
   React.useEffect(() => {

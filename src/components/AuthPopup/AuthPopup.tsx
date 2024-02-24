@@ -7,6 +7,7 @@ import Select from "@mui/joy/Select";
 import Option from "@mui/joy/Option";
 import { AiFillDelete, AiOutlineClose } from "react-icons/ai";
 import dayjs from "dayjs";
+import ForgotPassword from "./ForgotPassword";
 
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -36,7 +37,7 @@ const AuthPopup: React.FC<AuthPopupProps> = ({ setShowpopup }) => {
     name: "",
     email: "",
     password: "",
-    weightInKg: 0.0,
+    weightInKg: 0.0, 
     heightInCm: 0.0,
     goal: "",
     gender: "",
@@ -44,75 +45,16 @@ const AuthPopup: React.FC<AuthPopupProps> = ({ setShowpopup }) => {
     activityLevel: "",
   });
 
+  const [showEmailPopup, setShowEmailPopup] =
+    React.useState<boolean>(false);
+
   const [loginformData, setLoginFormData] = useState({
     email: "",
     password: "",
   });
 
-  // router.post('/register', async (req, res, next) => {
-  //     try {
-  //         const { name, email, password, weightInKg, heightInCm, gender, dob, goal, activityLevel } = req.body;
-  //         const existingUser = await User.findOne({ email: email });
 
-  //         if (existingUser) {
-  //             return res.status(409).json(createResponse(false, 'Email already exists'));
-  //         }
-  //         const newUser = new User({
-  //             name,
-  //             password,
-  //             email,
-  //             weight: [
-  //                 {
-  //                     weight: weightInKg,
-  //                     unit: "kg",
-  //                     date: Date.now()
-  //                 }
-  //             ],
-  //             height: [
-  //                 {
-  //                     height: heightInCm,
-  //                     date: Date.now(),
-  //                     unit: "cm"
-  //                 }
-  //             ],
-  //             gender,
-  //             dob,
-  //             goal,
-  //             activityLevel
-  //         });
-  //         await newUser.save(); // Await the save operation
 
-  //         res.status(201).json(createResponse(true, 'User registered successfully'));
-
-  //     } catch (err) {
-  //         next(err)
-  //     }
-  // })
-  // router.post('/login', async (req, res, next) => {
-  //     try {
-  //         const { email, password } = req.body;
-  //         const user = await User.findOne({ email });
-  //         if (!user) {
-  //             return res.status(400).json(createResponse(false, 'Invalid credentials'));
-  //         }
-  //         const isMatch = await bcrypt.compare(password, user.password);
-  //         if (!isMatch) {
-  //             return res.status(400).json(createResponse(false, 'Invalid credentials'));
-  //         }
-
-  //         const authToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: '50m' });
-  //         const refreshToken = jwt.sign({ userId: user._id }, process.env.JWT_REFRESH_SECRET_KEY, { expiresIn: '100m' });
-
-  //         res.cookie('authToken', authToken, { httpOnly: true });
-  //         res.cookie('refreshToken', refreshToken, { httpOnly: true });
-  //         res.status(200).json(createResponse(true, 'Login successful', {
-  //             authToken,
-  //             refreshToken
-  //         }));
-  //     } catch (err) {
-  //         next(err)
-  //     }
-  // })
 
   const handleLogin = () => {
     console.log(loginformData);
@@ -356,7 +298,9 @@ const AuthPopup: React.FC<AuthPopupProps> = ({ setShowpopup }) => {
             </p>
           </div>
         </div>
-      ) : (
+      ) : showEmailPopup ? (
+        <ForgotPassword setShowEmailPopup = {setShowEmailPopup}/>
+      ) :  (
         // Login form
         <div className="authform">
           <div className="left">
@@ -391,6 +335,7 @@ const AuthPopup: React.FC<AuthPopupProps> = ({ setShowpopup }) => {
                   });
                 }}
               />
+
               <button
                 onClick={(e) => {
                   e.preventDefault();
@@ -400,16 +345,23 @@ const AuthPopup: React.FC<AuthPopupProps> = ({ setShowpopup }) => {
                 Login
               </button>
             </form>
-            <p>
-              Don't have an account?{" "}
-              <button
-                onClick={() => {
-                  setShowSignup(true);
+            <div className="forgot-pass-signup-line">
+              <span className="forgot-password" 
+                onClick={()=>{
+                  setShowEmailPopup(true)
                 }}
-              >
-                Signup
-              </button>
-            </p>
+              >forgot password</span>
+              <span>
+                Don't have an account?{" "}
+                <button
+                  onClick={() => {
+                    setShowSignup(true);
+                  }}
+                >
+                  Signup
+                </button>
+              </span>
+            </div>
           </div>
         </div>
       )}
