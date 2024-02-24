@@ -350,7 +350,7 @@ const AuthPopup: React.FC<AuthPopupProps> = ({ setShowpopup }) => {
                 onClick={()=>{
                   setShowEmailPopup(true)
                 }}
-              >forgot password</span>
+              >Forgot password</span>
               <span>
                 Don't have an account?{" "}
                 <button
