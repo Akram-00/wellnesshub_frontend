@@ -1,15 +1,16 @@
 import * as React from "react";
 import { styled } from "@mui/material/styles";
 import { AiFillDelete, AiOutlineClose } from "react-icons/ai";
+import UserProfileImage from './UserProfileImage/UserProfileImage'
+
 interface UploadImagePopupProps {
   setUploadImage: React.Dispatch<React.SetStateAction<boolean>>;
+  setProfileImage: React.Dispatch<React.SetStateAction<any>>;
 }
 
 const UploadUserImage: React.FC<UploadImagePopupProps> = ({
-  setUploadImage,
+  setUploadImage,setProfileImage
 }) => {
-  const [image, setImage] = React.useState<any>(null);
-  const uploadUserImage = async () => {};
 
   return (
     <div className="popupout">
@@ -22,6 +23,7 @@ const UploadUserImage: React.FC<UploadImagePopupProps> = ({
         >
           <AiOutlineClose />
         </button>
+        <UserProfileImage setProfileImage={setProfileImage}  setUploadImage={setUploadImage}/>
       </div>
     </div>
   );

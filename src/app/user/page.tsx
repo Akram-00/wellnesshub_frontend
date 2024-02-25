@@ -81,26 +81,26 @@ const page = () => {
   const workoutid = searchParams.get("id");
 
   const [data, setData] = React.useState<any>();
+  const [profileImage, setProfileImage] = React.useState<any>("");
 
   // Popups state
   const [changePassword, setChangePassword] = useState<boolean>(false);
   const [deleteUser, setDeleteUser] = useState<boolean>(false);
   const [resetUserData, setResetUserData] = useState<boolean>(false);
   const [uploadImage, setUploadImage] = useState<boolean>(false);
-
   // popup handler
 
-    const handleClick = (
-      setter: React.Dispatch<React.SetStateAction<boolean>>
-    ) => {
-      // Set all other state variables to false
-      setChangePassword(false);
-      setDeleteUser(false);
-      setResetUserData(false);
-      setUploadImage(false);
-      // Set the clicked state variable to true
-      setter(true);
-    };
+  const handleClick = (
+    setter: React.Dispatch<React.SetStateAction<boolean>>
+  ) => {
+    // Set all other state variables to false
+    setChangePassword(false);
+    setDeleteUser(false);
+    setResetUserData(false);
+    setUploadImage(false);
+    // Set the clicked state variable to true
+    setter(true);
+  };
 
   const getData = async () => {
     try {
@@ -115,6 +115,7 @@ const page = () => {
       if (data.ok) {
         console.log(handleUserData(data.data));
         setData(handleUserData(data.data));
+        setProfileImage(handleUserData(data.data).profilePicture);
       } else {
         setData({});
       }
@@ -135,7 +136,13 @@ const page = () => {
         <div className="profile-content">
           <div className="left">
             <div className="profile-picture-name">
-              <Image src={DefaultProfile} alt="" className="profile-image" />
+              <img
+                src={data.profilePicture ? profileImage : DefaultProfile}
+                className="profile-image"
+                alt="Image description"
+                width={150}
+                height={150}
+              />
               <h5 className="profile-name">{data.name}</h5>
             </div>
             <h6 className="profile-name">Email : {data.email}</h6>
@@ -170,7 +177,7 @@ const page = () => {
               <div
                 className="user-profile-setting"
                 onClick={() => {
-                  handleClick(setUploadImage)
+                  handleClick(setUploadImage);
                 }}
               >
                 <p>UPLOAD PROFILE IMAGE</p>
@@ -181,7 +188,7 @@ const page = () => {
               <div
                 className="user-profile-setting"
                 onClick={() => {
-                  handleClick(setChangePassword)
+                  handleClick(setChangePassword);
                 }}
               >
                 <p>CHANGE PASSWORD</p>
@@ -192,7 +199,7 @@ const page = () => {
               <div
                 className="user-profile-setting"
                 onClick={() => {
-                  handleClick(setResetUserData)
+                  handleClick(setResetUserData);
                 }}
               >
                 <p>RESET ALL DATA</p>
@@ -203,7 +210,7 @@ const page = () => {
               <div
                 className="user-profile-setting"
                 onClick={() => {
-                  handleClick(setDeleteUser)
+                  handleClick(setDeleteUser);
                 }}
               >
                 <p>DELELTE THE ACCOUNT</p>
@@ -215,10 +222,17 @@ const page = () => {
           </div>
         </div>
       )}
-      {changePassword && <ChangePassword setChangePassword={setChangePassword} />}
+      {changePassword && (
+        <ChangePassword setChangePassword={setChangePassword} />
+      )}
       {deleteUser && <DeleteUser setDeleteUser={setDeleteUser} />}
       {resetUserData && <ResetUserData setResetUserData={setResetUserData} />}
-      {uploadImage && <UploadImage setUploadImage={setUploadImage} />}
+      {uploadImage && (
+        <UploadImage
+          setUploadImage={setUploadImage}
+          setProfileImage={setProfileImage}
+        />
+      )}
     </div>
   );
 };
