@@ -1,0 +1,73 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+main {
+  font-size: 10px;
+  height: calc(100vh - 60px);
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+main section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-left: 5em;
+}
+
+:root {
+  --red: #d01c28;
+  --gray: #2e2e2e;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+h1 {
+  font-weight: 800;
+  font-size: 4rem;
+  max-width: 700px;
+  line-height: 6rem;
+  color: #ffc20c;
+}
+
+main::before {
+  content: "";
+  filter: brightness(58%);
+  background: url("https://img.freepik.com/free-photo/young-fitness-man-studio_7502-5008.jpg?w=740&t=st=1709105818~exp=1709106418~hmac=9cc5eac10a37ebb0b8b9f6308a79da80f81d68ecd22daf8d5a38e70df3f3384d");
+  height: 100vh;
+  width: 100%;
+  top: 0;
+  position: absolute;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  z-index: -1;
+}
+
+p {
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+  font-weight: 400;
+  color: #ffffff;
+  max-width: 700px;
+  line-height: 2.5rem;
+}
+
+.hero-btn {
+  display: flex;
+  gap: 40px;
+}
+
+.btn-1 {
+  all: unset;
+  padding: 6px 16px;
+  background-color: #ffc20c;
+  min-height: 1.5em;
+  color: white;
+  font-weight: 500;
+  font-size: 1.5rem;
+}

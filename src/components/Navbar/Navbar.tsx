@@ -76,7 +76,7 @@ const Navbar = () => {
     <nav>
       <Image src={Logo} alt="logo" />
       <Link href="/">Home</Link>
-      <Link href="/about">About</Link>
+      <Link href="/pages/about">About</Link>
       {isLoggedin && (
         <Link href={`/user?id=${userId}`}>
           <IoIosBody />
