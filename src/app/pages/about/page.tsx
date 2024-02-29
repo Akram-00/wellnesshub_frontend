@@ -1,7 +1,14 @@
+"use client"
 import React from "react";
 import "./About.css";
 
 const Page = () => {
+
+
+  const handleButtonClick = () =>{
+    window.location.href='/'
+  }
+
   return (
     <>
       <main>
@@ -13,7 +20,9 @@ const Page = () => {
             MOTIVATED, TRACK PROGRESS, AND PRIORITIZE YOUR WELLNESS JOURNEY.
           </p>
           <div className="hero-btn">
-            <button className="btn-1">Join now</button>
+            <button className="btn-1" onClick={handleButtonClick}>
+              Join now
+            </button>
           </div>
         </section>
       </main>
