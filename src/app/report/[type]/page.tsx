@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { LineChart } from "@mui/x-charts/LineChart";
-import "./ReportPage.css";
+import "./reportPage.css";
 import { AiFillEdit } from "react-icons/ai";
 import {
   CalorieIntakePopup,
