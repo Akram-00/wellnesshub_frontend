@@ -73,7 +73,7 @@ const AuthPopup: React.FC<AuthPopupProps> = ({ setShowpopup }) => {
         if (data.ok) {
           toast.success(data.message);
           setShowpopup(false);
-          // window.location.reload();
+          window.location.reload();
         } else {
           toast.error(data.message);
         }
